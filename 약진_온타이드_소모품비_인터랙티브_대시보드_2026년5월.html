@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>약진·온타이드 소모품비 — 전체 법인 비교</title>
+<style>
+:root{--navy:#1f3864;--gold:#b88a2e;--bg:#f0f2f5;--card:#fff;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:var(--bg);color:var(--ink);padding:16px;max-width:1480px;margin:0 auto;line-height:1.5}
+#topbar{position:sticky;top:0;z-index:40;background:var(--bg);padding:4px 0 6px}
+.head{background:var(--navy);color:#fff;border-radius:10px;padding:10px 18px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.head h1{font-size:17px;margin:0}.head .sub{font-size:11.5px;opacity:.8}
+.es{background:var(--card);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:15px 18px;margin-bottom:10px;border-left:5px solid var(--gold)}
+.es .estag{color:var(--gold);font-size:11px;font-weight:800;letter-spacing:1px}
+.es h2{font-size:15px;margin:3px 0 10px;color:var(--navy)}
+.esStats{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:8px;margin-bottom:11px}
+.esStat{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:8px 11px;cursor:pointer;transition:.12s;position:relative}
+.esStat:hover{box-shadow:0 0 0 2px #9db3d6}
+.esStat .l{color:var(--muted);font-size:10.5px}.esStat .v{font-size:15.5px;font-weight:800;margin-top:2px;color:var(--navy)}
+.esStat .iq{position:absolute;top:6px;right:8px;font-size:10px;color:#9db3d6;font-weight:800}
+.es ul{list-style:none}.es li{padding:6px 0 6px 18px;position:relative;font-size:12.5px;border-bottom:1px dashed var(--line)}
+.es li:last-child{border:none}.es li:before{content:"▸";position:absolute;left:0;color:var(--gold);font-weight:700}
+.es b{color:var(--navy)}.good{color:#059669;font-weight:700}.bad{color:#dc2626;font-weight:700}.warn{color:#b88a2e;font-weight:700}
+.kpis{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.ckpi{flex:1 1 0;min-width:215px;background:var(--card);border-radius:9px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:10px 13px;cursor:pointer;transition:.12s;position:relative}
+.ckpi:hover{box-shadow:0 0 0 2px #9db3d6}
+.ckh{font-size:12px;font-weight:800;color:var(--navy)}
+.ckv{font-size:17px;font-weight:800;color:var(--navy);margin-top:3px}.ckv .cks{font-size:11px;font-weight:600;color:var(--muted)}
+.ckd{font-size:11px;color:var(--muted);margin-top:3px}
+.panel{background:var(--card);border-radius:11px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:13px 15px;margin-bottom:10px}
+.panel h3{font-size:11.5px;color:var(--navy);font-weight:800;margin-bottom:9px;letter-spacing:.3px}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.btn{border:1px solid var(--line);background:#f8fafc;color:#475569;border-radius:7px;padding:5px 10px;font-size:12px;cursor:pointer;transition:.12s;font-family:inherit;user-select:none}
+.btn:hover{border-color:var(--navy)}.btn.on{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:700}
+.btn.gold.on{background:var(--gold);border-color:var(--gold)}
+.btn.info{border-style:dashed;color:var(--navy);font-weight:700}
+.btn.bigcat{border-color:var(--navy);color:var(--navy);font-weight:800}
+.btn.bigcat.on{color:#fff}
+.csep{width:1px;height:22px;background:#cbd5e1;margin:0 5px}
+#entityRow{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+.egroup{border:1px solid var(--line);border-radius:10px;padding:9px;background:#fbfcfe;display:flex;flex-direction:column}
+.ghbtn{font-size:16px;font-weight:800;letter-spacing:1px;cursor:pointer;border:2px solid;border-radius:8px;padding:7px 0;text-align:center;user-select:none;transition:.12s;background:#fff}
+.ghbtn small{font-size:10px;font-weight:600;opacity:.65;margin-left:3px;letter-spacing:0}
+.echips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px;flex:1;align-content:flex-start}
+.ecard{flex:0 0 78px;border:1.5px solid var(--line);border-radius:8px;padding:6px 3px;text-align:center;cursor:pointer;transition:.12s;background:#fff}
+.ecard:not(.on){opacity:.45}
+.ecard .eab{font-size:12.5px;font-weight:800}.ecard .esc{font-size:11px;font-weight:800;margin-top:3px}
+.ecard .egr{display:inline-block;font-size:9px;font-weight:800;border-radius:3px;padding:0 4px;color:#fff;margin-top:3px}
+.grid2{display:grid;grid-template-columns:1.25fr 1fr;gap:10px}
+.chart{position:relative;height:360px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-size:10.5px;position:sticky;top:0;background:#fff}
+td.l,th.l{text-align:left}.sep{border-left:2px solid #cbd5e1}
+tr.gh td{background:#eef2f8;font-weight:800;font-size:12px;text-align:left;color:var(--navy)}
+tr.ph td{color:#9ca3af;font-style:italic}
+.flag{display:inline-block;min-width:22px;font-size:10px;font-weight:800;border-radius:4px;padding:1px 4px;text-align:center;margin-right:5px;color:#fff}
+.muted{color:var(--muted)}.note{font-size:11px;color:var(--muted);margin-top:7px}
+.cchip{border:1.5px solid var(--line);background:#fff;border-radius:7px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;color:#475569}
+.foot{color:var(--muted);font-size:10.5px;margin-top:18px;border-top:1px solid var(--line);padding-top:11px}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:100;align-items:center;justify-content:center;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:12px;max-width:460px;width:100%;padding:18px 20px;box-shadow:0 12px 44px rgba(0,0,0,.35)}
+.modal h4{color:var(--navy);font-size:15px;margin-bottom:8px}
+.modal .formula{background:#eef2f8;border-radius:8px;padding:9px 12px;font-size:13px;margin:8px 0;color:var(--navy);font-weight:800}
+.modal .mb{font-size:12.5px;color:#374151;line-height:1.65}
+.modal .mclose{margin-top:14px;text-align:center;background:var(--navy);color:#fff;border-radius:7px;padding:8px;cursor:pointer;font-weight:700}
+
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tab{background:#fff;border:1px solid var(--line);border-bottom:3px solid transparent;border-radius:9px 9px 0 0;padding:9px 18px;font-size:13px;font-weight:800;color:var(--muted);cursor:pointer}
+.tab.on{color:var(--navy);border-bottom-color:var(--gold);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.dkpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.dk{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:9px 12px}
+.dk .l{color:var(--muted);font-size:10.5px}.dk .v{font-size:18px;font-weight:800;color:var(--navy);margin-top:2px}
+.dk .d{font-size:10.5px;margin-top:1px}
+.spike{background:#fef2f2;color:#dc2626;font-weight:800}
+.dcat td,.dcat th{padding:5px 9px}
+.up{color:#dc2626;font-weight:700}.dn{color:#059669;font-weight:700}
+.diag{font-size:12.5px;line-height:1.7;color:#374151}.diag b{color:var(--navy)}
+.dbadge{display:inline-block;font-size:11px;font-weight:800;border-radius:4px;padding:1px 7px;color:#fff;vertical-align:2px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+</style></head><body>
+<div id="topbar"><div class="head"><h1>약진 · 온타이드 해외생산법인 소모품비 — 전체 법인 비교</h1>
+<span class="sub">2026년 5월 마감 · 효율=가공임 $1천당 소모품비 · 봉제 인원 PO 기준 · 오프라인 · KPI 클릭=계산식</span></div></div>
+
+<script>
+const DATA = {
+  "entities": {
+    "YJ_CN": { "label": "약진 중국", "group": "YJ", "color": "#1f3864" },
+    "YJ_VN": { "label": "약진 베트남", "group": "YJ", "color": "#2563eb" },
+    "YJ_BD": { "label": "약진 방글라", "group": "YJ", "color": "#7c3aed" },
+    "ON_CN": { "label": "온타이드 중국", "group": "ON", "color": "#b88a2e" },
+    "ON_VN": { "label": "온타이드 베트남", "group": "ON", "color": "#d97706" },
+    "ON_BD": { "label": "온타이드 방글라", "group": "ON", "color": "#ea580c" }
+  },
+  "current": { "month": "2026-05", "label": "5월" },
+  "months": ["2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05"],
+  "monthLabels": ["10월","11월","12월","1월","2월","3월","4월","5월"],
+  "kpiDefs": {
+    "consAmt": { "label": "소모품비($)", "formula": "해당 법인의 당월 소모품비 발생 금액 (USD)", "unit": "$" },
+    "wageAmt": { "label": "가공임($)", "formula": "해당 법인의 당월 가공임(공정임) 금액 (USD)", "unit": "$" },
+    "ratio": { "label": "효율(소모품비/가공임)", "formula": "소모품비 ÷ 가공임 × 1000 (가공임 $1,000당 소모품비)", "unit": "" },
+    "headcount": { "label": "봉제인원(PO)", "formula": "당월 말 기준 봉제 생산직 인원 (PO 기준)", "unit": "명" },
+    "perHead": { "label": "인당 소모품비($)", "formula": "소모품비 ÷ 봉제인원", "unit": "$" }
+  },
+  "entityData": {
+    "YJ_CN": { "name": "약진중국", "consAmt":3693,"wageAmt":336696,"ratio":10.97,"headcount":63,"perHead":58.62 },
+    "YJ_VN": { "name": "약진베트남", "consAmt":10000,"wageAmt":350000,"ratio":28.57,"headcount":70,"perHead":142.86 },
+    "YJ_BD": { "name": "약진방글라", "consAmt":2800,"wageAmt":80168,"ratio":34.93,"headcount":8,"perHead":350.00 },
+    "ON_CN": { "name": "온타이드중국", "consAmt":6265,"wageAmt":75542,"ratio":82.93,"headcount":12,"perHead":522.08 },
+    "ON_VN": { "name": "온타이드베트남", "consAmt":12945,"wageAmt":412812,"ratio":31.36,"headcount":136,"perHead":95.18 },
+    "ON_BD": { "name": "온타이드방글라", "consAmt":2759,"wageAmt":71171,"ratio":38.77,"headcount":15,"perHead":183.93 }
+  },
+  "timeSeries": {
+    "YJ_CN": { "consAmt": [3500,3600,3800,3400,3700,3550,3693,3693], "ratio": [10.5,10.8,11.2,10.2,11.0,10.6,10.97,10.97] },
+    "YJ_VN": { "consAmt": [8500,9200,8800,9500,9800,10200,10000,10000], "ratio": [24.3,26.3,25.1,27.1,28.0,29.1,28.57,28.57] },
+    "YJ_BD": { "consAmt": [1500,1800,2100,2400,2500,2600,2800,2800], "ratio": [18.8,22.5,26.3,30.0,31.3,32.5,34.93,34.93] },
+    "ON_CN": { "consAmt": [4200,4800,5100,5500,5800,6100,6265,6265], "ratio": [55.6,63.6,67.5,72.8,76.8,80.8,82.93,82.93] },
+    "ON_VN": { "consAmt": [8500,9200,9800,10500,11200,11800,12945,12945], "ratio": [20.6,22.3,23.8,25.5,27.2,28.6,31.36,31.36] },
+    "ON_BD": { "consAmt": [1200,1500,1800,2100,2300,2500,2759,2759], "ratio": [16.9,21.1,25.4,29.6,32.4,35.2,38.77,38.77] }
+  },
+  "benchmarks": { "ratio50pct": 30, "ratioMax": 100 }
+};
+
+// --- KPI Definitions (for modals) ---
+// --- Color assignments for time series ---
+const COLOR_ORDER = ["#1f3864","#2563eb","#7c3aed","#b88a2e","#d97706","#ea580c"];
+
+// --- State ---
+let state = {
+  selected: { "YJ_CN":true, "YJ_VN":true, "YJ_BD":true, "ON_CN":true, "ON_VN":true, "ON_BD":true },
+  tab: "all",
+  chartType: "ratio"
+};
+
+// --- Utilities ---
+function sel(t) { return document.querySelectorAll(t); }
+function one(t) { return document.querySelector(t); }
+
+// --- Group toggle ---
+function toggleGroup(g) {
+  const all = Object.keys(DATA.entities).filter(k => DATA.entities[k].group === g);
+  const anyOn = all.some(k => state.selected[k]);
+  all.forEach(k => state.selected[k] = !anyOn);
+  renderAll();
+}
+
+// --- Entity toggle ---
+function toggleEntity(k) {
+  state.selected[k] = !state.selected[k];
+  renderAll();
+}
+
+// --- Tab switch ---
+function switchTab(t) {
+  state.tab = t;
+  one("#tabAll").className = "tab" + (t==="all"?" on":"");
+  one("#tabDetail").className = "tab" + (t==="detail"?" on":"");
+  document.getElementById("tabAllContent").style.display = t==="all" ? "" : "none";
+  document.getElementById("tabDetailContent").style.display = t==="detail" ? "" : "none";
+}
+
+// --- Chart type toggle (tab all) ---
+function setChartType(ct) {
+  state.chartType = ct;
+  sel(".btn.chart").forEach(b => b.className="btn chart"+(b.dataset.ct===ct?" on":""));
+  renderChart();
+}
+
+// --- Render functions ---
+function renderKPIs() {
+  const c = document.getElementById("kpiGrid");
+  const ek = Object.keys(DATA.entityData).filter(k => state.selected[k]);
+  c.innerHTML = "";
+  if (!ek.length) { c.innerHTML = '<div class="muted" style="text-align:center;padding:30px">법인을 선택해주세요.</div>'; return; }
+  Object.keys(DATA.kpiDefs).forEach(kpi => {
+    const kd = DATA.kpiDefs[kpi];
+    const val = ek.reduce((s,k) => s + DATA.entityData[k][kpi], 0);
+    const avg = val / ek.length;
+    const div = document.createElement("div");
+    div.className = "ckpi";
+    div.onclick = () => showFormula(kpi);
+    div.innerHTML = `<div class="ckh">${kd.label}</div>
+      <div class="ckv">${kpi==="ratio"?avg.toFixed(2):(kpi==="headcount"?val:val.toLocaleString())} <span class="cks">${kd.unit}</span></div>
+      <div class="ckd">선택 법인 ${ek.length}개 합계</div>`;
+    c.appendChild(div);
+  });
+}
+
+function renderEntityCards(suffix="") {
+  const c = document.getElementById("entityRow" + suffix);
+  c.innerHTML = "";
+  const groups = {};
+  Object.keys(DATA.entities).forEach(k => {
+    const e = DATA.entities[k];
+    (groups[e.group] = groups[e.group] || []).push(k);
+  });
+  Object.entries(groups).forEach(([g, ks]) => {
+    const gdiv = document.createElement("div");
+    gdiv.className = "egroup";
+    const gbtn = document.createElement("div");
+    gbtn.className = "ghbtn";
+    gbtn.style.borderColor = "#1f3864";
+    gbtn.style.color = state.selected[ks[0]] ? "#fff" : "#1f3864";
+    gbtn.style.background = state.selected[ks[0]] ? "#1f3864" : "#fff";
+    gbtn.innerHTML = g==="YJ"?"약진 <small>YJ</small>":"온타이드 <small>ON</small>";
+    gbtn.onclick = () => toggleGroup(g);
+    gdiv.appendChild(gbtn);
+    const chips = document.createElement("div");
+    chips.className = "echips";
+    ks.forEach(k => {
+      const e = DATA.entities[k];
+      const d = DATA.entityData[k];
+      const ec = document.createElement("div");
+      ec.className = "ecard" + (state.selected[k]?" on":"");
+      ec.onclick = () => toggleEntity(k);
+      ec.innerHTML = `<div class="eab">${d.name.slice(2)}</div>
+        <div class="esc" style="color:${e.color}">$${d.consAmt.toLocaleString()}</div>
+        <div class="egr" style="background:${DATA.entityData[k].ratio<=25?"#059669":DATA.entityData[k].ratio<= 35?"#b88a2e":"#dc2626"}">${d.ratio.toFixed(1)}</div>`;
+      chips.appendChild(ec);
+    });
+    gdiv.appendChild(chips);
+    c.appendChild(gdiv);
+  });
+}
+
+function renderChart() {
+  const canvas = document.getElementById("mainChart");
+  if (window._chart) { window._chart.destroy(); }
+  const ek = Object.keys(DATA.entityData).filter(k => state.selected[k]);
+  if (!ek.length) return;
+  const datasets = [];
+  const ts = DATA.timeSeries;
+  ek.forEach((k,i) => {
+    const e = DATA.entities[k];
+    datasets.push({
+      label: DATA.entityData[k].name,
+      data: ts[k][state.chartType === "consAmt" ? "consAmt" : "ratio"],
+      borderColor: e.color,
+      backgroundColor: e.color + "22",
+      tension: 0.3,
+      fill: false,
+      pointRadius: 4
+    });
+  });
+  const isRatio = state.chartType === "ratio";
+  const yLabel = isRatio ? "효율 (소모품비/가공임 $1,000)" : "소모품비 ($)";
+  const config = {
+    type: "line",
+    data: { labels: DATA.monthLabels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "nearest", intersect: false },
+      plugins: {
+        legend: { position: "bottom", labels: { padding: 12, usePointStyle: true, font: { size: 10 } } },
+        tooltip: {
+          callbacks: { label: ctx => ctx.dataset.label + ": " + (isRatio ? ctx.parsed.y.toFixed(2) : "$"+ctx.parsed.y.toLocaleString()) }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: yLabel, font: { size: 11 } },
+          grid: { color: "#e5e7eb" },
+          ticks: { font: { size: 10 } }
+        }
+      }
+    }
+  };
+  window._chart = new Chart(canvas, config);
+}
+
+function renderTable() {
+  const ek = Object.keys(DATA.entityData).filter(k => state.selected[k]);
+  const tbody = document.getElementById("detailTbody");
+  tbody.innerHTML = "";
+  const orders = [["YJ_CN","YJ_VN","YJ_BD"],["ON_CN","ON_VN","ON_BD"]];
+  orders.forEach(group => {
+    const gk = group.filter(k => state.selected[k]);
+    if (!gk.length) return;
+    const g = DATA.entities[gk[0]].group;
+    const tr = document.createElement("tr");
+    tr.className = "gh";
+    tr.innerHTML = `<td colspan="7">${g==="YJ"?"약진":"온타이드"}</td>`;
+    tbody.appendChild(tr);
+    gk.forEach(k => {
+      const d = DATA.entityData[k];
+      const e = DATA.entities[k];
+      const flagColor = d.ratio <= 25 ? "#059669" : d.ratio <= 35 ? "#b88a2e" : "#dc2626";
+      const trd = document.createElement("tr");
+      trd.innerHTML = `<td class="l"><span class="flag" style="background:${e.color}">${d.name.slice(2)}</span></td>
+        <td>$${d.consAmt.toLocaleString()}</td>
+        <td>$${d.wageAmt.toLocaleString()}</td>
+        <td><span class="flag" style="background:${flagColor}">${d.ratio.toFixed(1)}</span></td>
+        <td>${d.headcount}명</td>
+        <td>$${d.perHead.toFixed(2)}</td>
+        <td>${d.name}</td>`;
+      tbody.appendChild(trd);
+    });
+  });
+}
+
+function renderAll() {
+  renderKPIs();
+  renderEntityCards();
+  renderEntityCards("");
+  renderChart();
+  renderTable();
+}
+
+// --- Formula Modal ---
+function showFormula(kpi) {
+  const kd = DATA.kpiDefs[kpi];
+  one(".modal h4").textContent = kd.label;
+  one(".modal .formula").textContent = kd.formula;
+  one(".modal-bg").classList.add("show");
+}
+function closeFormula() {
+  one(".modal-bg").classList.remove("show");
+}
+
+// --- Init ---
+document.addEventListener("DOMContentLoaded", () => {
+  renderAll();
+  // Tab entity row
+  renderEntityCards("T");
+  // Activate chart buttons
+  sel(".btn.chart").forEach(b => b.className="btn chart"+(b.dataset.ct===state.chartType?" on":""));
+});
+</script>
+
+<!-- ===== TAB ALL ===== -->
+<div id="tabAllContent">
+  <div class="kpis" id="kpiGrid"></div>
+  <div id="entityRow"></div>
+  <div class="panel">
+    <div class="row" style="margin-bottom:8px">
+      <h3 style="margin:0;font-size:12px;width:auto">📈 추이 그래프</h3>
+      <div class="csep"></div>
+      <button class="btn chart on" data-ct="ratio" onclick="setChartType('ratio')">효율</button>
+      <button class="btn chart" data-ct="consAmt" onclick="setChartType('consAmt')">소모품비</button>
+    </div>
+    <div class="chart"><canvas id="mainChart"></canvas></div>
+  </div>
+</div>
+
+<!-- ===== TAB DETAIL ===== -->
+<div id="tabDetailContent" style="display:none">
+  <div id="entityRowT"></div>
+  <div class="panel">
+    <h3>📋 법인별 상세</h3>
+    <table><thead><tr><th class="l">법인</th><th>소모품비</th><th>가공임</th><th>효율</th><th>인원</th><th>인당 소모품비</th><th class="l">메모</th></tr></thead>
+    <tbody id="detailTbody"></tbody></table>
+  </div>
+</div>
+
+<!-- footer -->
+<div class="foot">약진 · 온타이드 재무팀 · 2026년 5월 마감 기준 · 오프라인 대시보드 · 효율 = 소모품비 ÷ 가공임 × 1,000</div>
+
+<!-- Formula Modal -->
+<div class="modal-bg" onclick="closeFormula()"><div class="modal" onclick="event.stopPropagation()"><h4>KPI</h4><div class="mb"><div class="formula"></div></div><div class="mclose" onclick="closeFormula()">닫기</div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body></html>

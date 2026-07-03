@@ -1,0 +1,176 @@
+<!doctype html><html lang=ko><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>2026 주요 바이어 실적 대시보드</title>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--fg:#f1f5f9;--muted:#94a3b8;--accent:#3b82f6;--green:#22c55e;--red:#ef4444;--yellow:#eab308;--purple:#a855f7;--orange:#f97316;--pink:#ec4899;--teal:#14b8a6;--cyan:#06b6d4}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:13px/1.5-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:20px}
+.dash{max-width:1280px;margin:0 auto}
+h1{font-size:22px;margin-bottom:4px}.subtitle{color:var(--muted);font-size:12px;margin-bottom:24px}
+.grid{display:grid;gap:16px}.grid-2{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:1fr 1fr 1fr}.grid-4{grid-template-columns:1fr 1fr 1fr 1fr}
+.card{background:var(--card);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.06)}
+.card h2{font-size:14px;font-weight:600;margin-bottom:12px;color:var(--accent)}.card h3{font-size:13px;font-weight:600;margin-bottom:8px}
+.stat{display:inline-block;font-size:20px;font-weight:700}.stat-up{color:var(--green)}.stat-down{color:var(--red)}.stat-neutral{color:var(--muted)}.label{font-size:11px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;color:var(--muted);font-weight:500;padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.06);font-size:11px}
+td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.04)}tr:hover td{background:rgba(255,255,255,0.02)}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.bar-wrap{display:flex;align-items:center;gap:6px}.bar{height:6px;border-radius:3px;min-width:2px}.bar-label{font-size:11px;min-width:40px;text-align:right}
+.flex{display:flex;gap:12px;align-items:center}.flex-between{display:flex;justify-content:space-between;align-items:center}
+.mt-12{margin-top:12px}.mt-16{margin-top:16px}.mb-8{margin-bottom:8px}
+.tag{font-size:10px;padding:1px 7px;border-radius:6px;font-weight:600}
+.tag-aa{background:rgba(34,197,94,0.2);color:var(--green)}.tag-a{background:rgba(59,130,246,0.2);color:var(--accent)}.tag-bbb{background:rgba(234,179,8,0.2);color:var(--yellow)}.tag-bb{background:rgba(249,115,22,0.2);color:var(--orange)}.tag-b{background:rgba(239,68,68,0.2);color:var(--red)}.tag-c{background:rgba(239,68,68,0.3);color:var(--red)}
+.section-title{font-size:16px;font-weight:700;margin:24px 0 12px;display:flex;align-items:center;gap:8px}.section-title span{font-size:12px;color:var(--muted);font-weight:400}
+.spark-group{display:flex;align-items:flex-end;height:28px;gap:2px}.spark-bar{width:8px;border-radius:2px 2px 0 0;min-height:2px}
+.company-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
+.scroll-x{overflow-x:auto}.guidance{background:rgba(59,130,246,0.08);border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 8px 8px 0;margin-top:8px}
+.guidance h4{font-size:12px;color:var(--accent);margin-bottom:4px}.guidance p{font-size:11px;color:var(--muted);line-height:1.5}
+.corr-item{padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)}.corr-item:last-child{border-bottom:none}
+@media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+</style>
+<div class=dash>
+<h1>📊 주요 미국 바이어 실적 대시보드</h1>
+<p class=subtitle>9개 주요 리테일/의류 브랜드 | 2023~2026년 분기+연간 데이터 | 기준: 2026년 1분기</p>
+<div class=section-title>📐 전체 요약 <span>9개사 합산</span></div>
+<div class="grid grid-4" id=kpiGrid></div>
+<div class="section-title mt-16">📈 매출 추이 (연간) <span>2023 → 2026Y</span></div>
+<div class=card><div class=scroll-x><table><thead><tr><th>바이어</th><th class=num>2023</th><th class=num>2024</th><th class=num>2025</th><th class=num>2026Y</th><th class=num>23→26 증감</th><th class=num>CAGR</th><th></th></tr></thead><tbody id=revenueTable></tbody></table></div></div>
+<div class="section-title mt-16">💰 수익성 비교 (2025Y 기준)</div>
+<div class="grid grid-3">
+  <div class=card><h2>🟢 GP%</h2><div id=gpChart></div></div>
+  <div class=card><h2>🔵 OP%</h2><div id=opChart></div></div>
+  <div class=card><h2>🟣 NI%</h2><div id=niChart></div></div>
+</div>
+<div class="section-title mt-16">🏢 회사별 상세 분석</div>
+<div id=companyCards class="grid" style=grid-template-columns:1fr 1fr 1fr></div>
+<div class="section-title mt-16">🔮 향후 실적 가이드라인</div>
+<div class=card id=guidanceSection></div>
+
+<div class="section-title mt-16" style="border-top:2px solid var(--accent);padding-top:20px">📈 미국 주요 거시경제 지표 <span>2023~2026</span></div>
+
+<div class="section-title" style="font-size:14px;margin-top:8px">🏷️ CPI (Consumer Price Index)</div>
+<div class=card>
+  <div class=scroll-x><table style=min-width:650px>
+    <thead><tr><th>연도</th><th class=num>2021</th><th class=num>2022</th><th class=num>2023</th><th class=num>2024</th><th class=num>2025</th></tr></thead>
+    <tbody>
+      <tr><td>CPI YoY% (12월 기준)</td><td class=num style=color:var(--red)><b>7.0%</b></td><td class=num style=color:var(--orange)><b>6.5%</b></td><td class=num style=color:var(--yellow)><b>3.4%</b></td><td class=num style=color:var(--green)><b>2.9%</b></td><td class=num style=color:var(--cyan)><b>2.7%</b></td></tr>
+      <tr><td>의류 CPI</td><td class=num>+5.8%</td><td class=num>+2.9%</td><td class=num>+1.0%</td><td class=num>+1.2%</td><td class=num style=color:var(--green)><b>+0.6%</b></td></tr>
+      <tr><td>주거비 CPI</td><td class=num>+4.1%</td><td class=num>+7.5%</td><td class=num>+6.2%</td><td class=num>+4.6%</td><td class=num style=color:var(--red)><b>+3.2%</b></td></tr>
+    </tbody>
+  </table></div>
+  <div style="font-size:11px;color:var(--muted);margin-top:8px">💡 의류 CPI(+0.6%)는 전체 물가(+2.7%)의 약 1/5 수준. 주거비가 물가 상승의 주요 요인</div>
+</div>
+
+<div class="section-title mt-16" style="font-size:14px">🏦 Fed 기준금리 (Fed Funds Rate)</div>
+<div class="grid grid-2">
+  <div class=card><h2>분기별 실효금리</h2>
+    <div class=scroll-x><table style=min-width:480px>
+      <thead><tr><th>분기</th><th class=num>23.1Q</th><th class=num>23.2Q</th><th class=num>23.3Q</th><th class=num>23.4Q</th><th class=num>24.1Q</th><th class=num>24.2Q</th><th class=num>24.3Q</th><th class=num>24.4Q</th><th class=num>25.1Q</th><th class=num>25.2Q</th><th class=num>25.3Q</th><th class=num>25.4Q</th><th class=num>26.1Q</th></tr></thead>
+      <tbody>
+        <tr><td>금리(%)</td><td class=num style=color:var(--orange)>4.65</td><td class=num style=color:var(--red)>5.08</td><td class=num style=color:var(--red)>5.33</td><td class=num style=color:var(--red)>5.33</td><td class=num style=color:var(--red)>5.33</td><td class=num style=color:var(--red)>5.33</td><td class=num style=color:var(--orange)>5.13</td><td class=num style=color:var(--yellow)>4.48</td><td class=num style=color:var(--green)>4.33</td><td class=num style=color:var(--green)>4.33</td><td class=num style=color:var(--green)>4.22</td><td class=num style=color:var(--cyan)>3.72</td><td class=num style=color:var(--cyan)><b>3.50</b></td></tr>
+      </tbody>
+    </table></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px">⬆️ 5.25~5.50% 피크 → 2024.9월 첫 인하 → 2026년말 ~3.50% 전망</div>
+  </div>
+  <div class=card><h2>FOMC 점도표 (2026.6월)</h2>
+    <div class=scroll-x><table style=min-width:400px>
+      <thead><tr><th>구분</th><th class=num>2026년</th><th class=num>2027년</th><th class=num>장기</th></tr></thead>
+      <tbody>
+        <tr><td>위원별 전망</td><td class=num style=color:var(--accent)>3.25~3.75%</td><td class=num style=color:var(--green)>2.75~3.25%</td><td class=num style=color:var(--purple)>2.50~3.00%</td></tr>
+        <tr><td>중간값</td><td class=num style=color:var(--accent)><b>3.50%</b></td><td class=num style=color:var(--green)><b>3.00%</b></td><td class=num style=color:var(--purple)><b>2.75%</b></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<div class="section-title mt-16" style="font-size:14px">📊 US Real GDP Growth (분기별, 연율화 %)</div>
+<div class=card>
+  <div class=scroll-x><table style=min-width:750px>
+    <thead><tr><th>분기</th><th class=num>23.1Q</th><th class=num>23.2Q</th><th class=num>23.3Q</th><th class=num>23.4Q</th><th class=num>24.1Q</th><th class=num>24.2Q</th><th class=num>24.3Q</th><th class=num>24.4Q</th><th class=num>25.1Q</th><th class=num>25.2Q</th><th class=num>25.3Q</th><th class=num>25.4Q</th><th class=num>26.1Q</th></tr></thead>
+    <tbody>
+      <tr><td>GDP (%)</td><td class=num>2.2</td><td class=num>2.1</td><td class=num style=color:var(--green)><b>4.9</b></td><td class=num style=color:var(--green)>3.4</td><td class=num style=color:var(--yellow)>1.6</td><td class=num style=color:var(--green)>3.0</td><td class=num style=color:var(--green)>2.8</td><td class=num style=color:var(--yellow)>2.1</td><td class=num style=color:var(--red)><b>-0.3</b></td><td class=num style=color:var(--yellow)>1.5</td><td class=num style=color:var(--green)>3.0</td><td class=num style=color:var(--yellow)>0.5</td><td class=num style=color:var(--accent)><b>1.6</b></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="section-title mt-16" style="font-size:14px">💬 Consumer Sentiment & Retail Sales</div>
+<div class="grid grid-2">
+  <div class=card><h2>소비자심리 (Univ. of Michigan Index)</h2>
+    <div class=scroll-x><table>
+      <thead><tr><th>시점</th><th class=num>2023.1</th><th class=num>2023.6</th><th class=num>2023.12</th><th class=num>2024.1</th><th class=num>2024.6</th><th class=num>2024.12</th><th class=num>2025.1</th><th class=num>2025.6</th><th class=num>2025.12</th></tr></thead>
+      <tbody>
+        <tr><td>지수</td><td class=num>64.9</td><td class=num>64.4</td><td class=num>69.7</td><td class=num style=color:var(--green)><b>79.0</b></td><td class=num>68.2</td><td class=num>74.0</td><td class=num>71.1</td><td class=num>69.0</td><td class=num style=color:var(--green)>74.2</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class=card><h2>미국 소매판매 (연간)</h2>
+    <div class=scroll-x><table>
+      <thead><tr><th>연도</th><th class=num>2023</th><th class=num>2024</th><th class=num>2025*</th></tr></thead>
+      <tbody>
+        <tr><td>판매액 ($T)</td><td class=num><b>$7.04T</b></td><td class=num><b>$7.22T</b></td><td class=num style=color:var(--green)><b>$7.50T</b></td></tr>
+        <tr><td>YoY 성장</td><td class=num>+2.1%</td><td class=num>+2.6%</td><td class=num style=color:var(--green)>+3.9%</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<div class="section-title mt-16" style="font-size:14px">📋 CPI 주요 항목별 상승률 (2025.12 YoY)</div>
+<div class=card>
+  <div class=scroll-x><table style=min-width:500px>
+    <thead><tr><th>항목</th><th class=num>의류</th><th class=num>전체</th><th class=num>식료품</th><th class=num>에너지</th><th class=num style=color:var(--red)>주거비</th><th class=num>교통</th><th class=num>의료</th></tr></thead>
+    <tbody>
+      <tr><td>YoY%</td><td class=num style=color:var(--green)><b>+0.6%</b></td><td class=num><b>+2.7%</b></td><td class=num>+2.5%</td><td class=num>+0.5%</td><td class=num style=color:var(--red)><b>+4.4%</b></td><td class=num>+1.8%</td><td class=num>+2.2%</td></tr>
+    </tbody>
+  </table></div>
+  <div style="font-size:11px;color:var(--muted);margin-top:8px">💡 의류(0.6%)는 전체(2.7%)의 1/5. 주거비(4.4%)가 가장 큰 물가 상승 요인</div>
+</div>
+
+<div class="card mt-16"><h2>📋 거시경제 주요 지표 요약</h2>
+  <div class=scroll-x><table style=min-width:700px>
+    <thead><tr><th>구분</th><th class=num>2023</th><th class=num>2024</th><th class=num>2025</th><th class=num>2026전망</th><th>추세</th></tr></thead>
+    <tbody>
+      <tr><td>CPI (Dec YoY)</td><td class=num style=color:var(--red)>3.4%</td><td class=num style=color:var(--yellow)>2.9%</td><td class=num style=color:var(--green)>2.7%</td><td class=num style=color:var(--green)>2.4%</td><td><span style=color:var(--green)>▼ 둔화</span></td></tr>
+      <tr><td>Fed Funds Rate (연말)</td><td class=num style=color:var(--red)>5.33%</td><td class=num style=color:var(--orange)>4.48%</td><td class=num style=color:var(--yellow)>3.72%</td><td class=num style=color:var(--green)>3.50%</td><td><span style=color:var(--green)>▼ 인하</span></td></tr>
+      <tr><td>GDP (연간 실질)</td><td class=num>2.5%</td><td class=num>2.8%</td><td class=num>1.9%</td><td class=num>1.8%</td><td><span style=color:var(--yellow)>→ 안정</span></td></tr>
+      <tr><td>Consumer Sentiment (연말)</td><td class=num>69.7</td><td class=num>74.0</td><td class=num>74.2</td><td class=num>~70</td><td><span style=color:var(--yellow)>→ 보합</span></td></tr>
+      <tr><td>Retail Sales ($T)</td><td class=num>$7.04T</td><td class=num>$7.22T</td><td class=num>$7.50T*</td><td class=num>$7.70T*</td><td><span style=color:var(--green)>▲ 성장</span></td></tr>
+      <tr><td>Apparel CPI (YoY)</td><td class=num style=color:var(--green)>+0.2%</td><td class=num style=color:var(--green)>+0.4%</td><td class=num style=color:var(--green)>+0.6%</td><td class=num style=color:var(--green)>+0.8%</td><td><span style=color:var(--green)>▲ 소폭↑</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="section-title mt-16" style="border-top:2px solid var(--accent);padding-top:20px">🔗 거시경제-바이어 실적 연관성 분석</div>
+<div class="grid grid-2">
+  <div class=card><h2>📊 주요 연관성</h2>
+    <div class=corr-item><div class=flex-between><span style=font-weight:600>CPI vs Retail Sales</span><span style=color:var(--green);font-size:11px>음(-)</span></div><div style=font-size:11px;color:var(--muted);margin-top:4px>CPI 2~3% 안정 시 소매판매 성장 유지. 2021년 인플레 급등에도 소비 방어.</div></div>
+    <div class=corr-item><div class=flex-between><span style=font-weight:600>금리 vs Retailer Margin</span><span style=color:var(--orange);font-size:11px>음(-)</span></div><div style=font-size:11px;color:var(--muted);margin-top:4px>고금리(5%+) 시 OP% 압박. Target/Kohl's 민감. 2024.9월 인하 후 회복세.</div></div>
+    <div class=corr-item><div class=flex-between><span style=font-weight:600>소비심리 vs Spending</span><span style=color:var(--green);font-size:11px>양(+)</span></div><div style=font-size:11px;color:var(--muted);margin-top:4px>심리 70+ 유지 시 소비 탄력적. 2024.1월 79.0 정점 후 2025.12월 74.2 회복.</div></div>
+    <div class=corr-item><div class=flex-between><span style=font-weight:600>GDP vs Retail Revenue</span><span style=color:var(--green);font-size:11px>양(+)</span></div><div style=font-size:11px;color:var(--muted);margin-top:4px>GDP +2% 내외 시 리테일 +2~4% 성장. 2025 Q1 -0.3%에도 버팀목 유지.</div></div>
+  </div>
+  <div class=card><h2>💡 인사이트 요약</h2>
+    <div style="background:rgba(34,197,94,0.08);border-left:3px solid var(--green);padding:8px 10px;border-radius:0 8px 8px 0;margin-bottom:6px;font-size:11px;color:var(--muted);line-height:1.5">
+      <b style=color:var(--fg)>의류 업종 특수성:</b> 의류 CPI(+0.6%)가 전체(+2.7%) 크게 하회 → 소비자 의류 구매력 높음. Gap/AEO/Target에 긍정적. 다만 주거비(+4.4%) 부담으로 가처분소득 감소 위험.
+    </div>
+    <div style="background:rgba(234,179,8,0.08);border-left:3px solid var(--yellow);padding:8px 10px;border-radius:0 8px 8px 0;margin-bottom:6px;font-size:11px;color:var(--muted);line-height:1.5">
+      <b style=color:var(--fg)>금리 인하 사이클 수혜:</b> 2024.9월 첫 인하, 2025년 3회 추가 인하(4.22%→3.72%). 2026년말 3.50% 전망. 할부 부담 완화 + 재고 비용 감소. HBI/Macy's 수혜.
+    </div>
+    <div style="background:rgba(239,68,68,0.08);border-left:3px solid var(--red);padding:8px 10px;border-radius:0 8px 8px 0;font-size:11px;color:var(--muted);line-height:1.5">
+      <b style=color:var(--fg)>리스크:</b> ①관세→GP% 압박 ②고용 둔화→심리 위축(PLCE/KSS 취약) ③양극화(WMT/AEO vs M/KSS/PLCE 구조조정) ④의류 물가 저성장→할인 경쟁
+    </div>
+  </div>
+</div>
+
+
+</div>
+<script>
+const companies=[{name:'Walmart',ticker:'WMT',color:'#22c55e',dot:'🟢',sector:'할인소매/대형마트',fyEnd:'1월',rating:'Aa2/AA/AA',rankings:{rev:1,gp:5,op:6,ni:7},rev:[611289,648125,680985,713163],gp:[147568,157983,169232,177768],op:[20428,27012,29348,29825],ni:[11680,15511,19436,21893],gpPct:[24.14,24.37,24.85,24.93],opPct:[3.34,4.17,4.31,4.18],niPct:[1.91,2.39,2.85,3.07],qRev:[152301,161632,160804,173388,161508,169335,169588,180554,165609,177402,179496,190656,177751],qOp:[6240,7316,6202,7254,6841,7940,6708,7859,7135,7286,6696,8708,7493],qGp:[37017,39782,39621,41563,40077,42525,42248,44382,41306,44631,44790,47041,44693],guidance:'FY27 +3~4%. 전자상거래·광고 확대로 마진 개선.'},{name:'Target',ticker:'TGT',color:'#ef4444',dot:'🔴',sector:'할인소매',fyEnd:'2월',rating:'A2/A/A',rankings:{rev:2,gp:3,op:3,ni:3},rev:[109120,107412,106566,104780],gp:[26814,29584,30064,29269],op:[3848,5707,5880,5729],ni:[2780,4138,4091,3705],gpPct:[24.57,27.54,28.21,27.93],opPct:[3.53,5.31,5.52,5.47],niPct:[2.55,3.85,3.84,3.54],qRev:[25322,24773,25398,31919,24531,25452,25668,30915,23846,25211,25270,30453,25443],qOp:[1328,1194,1216,1309,1296,1538,1333,1407,1372,1556,1224,1577,1394],qGp:[6936,6975,7249,8424,7060,7626,7266,8112,6718,7308,7133,8110,7382],guidance:'FY27 보합~소폭 하락. 소형매장 확대. OP% 5% 중반.'},{name:'Gap',ticker:'GAP',color:'#3b82f6',dot:'🔵',sector:'SPA/캐주얼의류',fyEnd:'2월',rating:'Ba2/BB/WD',rankings:{rev:7,gp:4,op:4,ni:5},rev:[15616,14889,15012,15298],gp:[5359,5775,5894,6051],op:[-69,560,616,692],ni:[-202,502,844,816],gpPct:[34.32,38.78,39.26,39.55],opPct:[-0.44,3.76,4.10,4.52],niPct:[-1.29,3.37,5.62,5.33],qRev:[3276,3548,3767,4298,3388,3660,3776,4166,3341,3654,3802,4332,3442],qOp:[-10,100,118,196,205,140,155,206,163,147,170,238,179],qGp:[1214,1318,1456,1684,1397,1413,1537,1712,1283,1463,1530,1796,1420],guidance:'FY27 소폭 성장. Old Navy/Athleta 호조. OP% 5% 목표.'},{name:"Kohl's",ticker:'KSS',color:'#eab308',dot:'🟡',sector:'백화점/홈퍼니싱',fyEnd:'2월',rating:'Baa2/BBB-/BBB-',rankings:{rev:6,gp:6,op:7,ni:8},rev:[18098,17476,16726,16121],gp:[6641,6978,6528,6189],op:[246,717,442,287],ni:[-199,317,109,272],gpPct:[36.69,39.93,39.03,38.40],opPct:[1.36,4.10,2.64,1.78],niPct:[-1.10,1.81,0.65,1.69],qRev:[3571,3895,4054,5956,3382,3757,3871,5502,3198,3611,3782,5498,3110],qOp:[98,56,62,73,43,62,47,52,28,51,33,43,20],qGp:[1524,1589,1650,2254,1459,1512,1545,2072,1381,1463,1518,2047,1347],guidance:'FY27 -2~-4%. Sephora 효과 소멸. 구조조정.'},{name:'Hanesbrands',ticker:'HBI',color:'#a855f7',dot:'🟣',sector:'언더웨어/의류',fyEnd:'12월',rating:'Ba2/BB/-',rankings:{rev:8,gp:8,op:5,ni:6},rev:[6234,5281,3548,0],gp:[2221,1896,1316,0],op:[520,289,185,0],ni:[-127,-320,-18,0],gpPct:[35.63,35.90,37.09,0],opPct:[8.34,5.47,5.21,0],niPct:[-2.04,-6.06,-0.51,0],qRev:[1389,1439,1156,1297,1156,995,1014,1016,881,904,872,891,0],qOp:[57,72,55,64,52,42,38,44,35,41,33,39,0],qGp:[450,509,436,485,461,381,403,410,332,348,319,336,0],guidance:'Champion 매각. $3.5B 안정화. 부채 감축.'},{name:"Carter's",ticker:'CRI',color:'#f97316',dot:'🟠',sector:'유아동복',fyEnd:'12월',rating:'-/BB+/-',rankings:{rev:9,gp:7,op:8,ni:4},rev:[3213,2946,2718,0],gp:[1472,1396,1288,0],op:[379,323,261,0],ni:[250,186,92,0],gpPct:[45.82,47.38,47.39,0],opPct:[11.80,10.96,9.60,0],niPct:[7.78,6.31,3.38,0],qRev:[696,600,792,858,662,564,631,822,608,532,585,788,0],qOp:[56,38,82,106,55,34,52,90,44,30,48,82,0],qGp:[310,288,353,386,315,270,295,376,289,258,275,366,0],guidance:'출생률 저하. DTC 강화. OP% 8~9% 방어.'},{name:"The Children's Place",ticker:'PLCE',color:'#ef4444',dot:'🔴',sector:'유아동복',fyEnd:'2월',rating:'-/-/-',rankings:{rev:10,gp:9,op:10,ni:10},rev:[1708,1603,1471,0],gp:[514,446,378,0],op:[-2,-84,-112,0],ni:[-155,-58,-88,0],gpPct:[30.09,27.82,25.70,0],opPct:[-0.12,-5.24,-7.61,0],niPct:[-9.08,-3.62,-5.98,0],qRev:[322,346,480,455,310,328,379,405,285,304,352,378,0],qOp:[-65,-42,8,-31,-72,-38,-12,-45,-58,-35,-18,-52,0],qGp:[88,95,144,99,82,90,121,94,71,84,105,86,0],guidance:'생존 모드. 유동성 위험. $1.2B 방어선.'},{name:"Macy's",ticker:'M',color:'#ec4899',dot:'🩷',sector:'백화점',fyEnd:'2월',rating:'Ba1/BB/BBB-',rankings:{rev:3,gp:2,op:2,ni:2},rev:[25305,23866,22584,21421],gp:[9999,9723,9078,8621],op:[1730,382,548,389],ni:[1146,45,582,642],gpPct:[39.51,40.74,40.20,40.25],opPct:[6.84,1.60,2.43,1.82],niPct:[4.53,0.19,2.58,3.00],qRev:[5173,5280,5038,8375,5000,5150,4890,7840,4720,4910,4650,7510,4580],qOp:[244,261,86,67,125,142,58,64,98,128,48,60,82],qGp:[2185,2180,2138,3269,2054,2090,2014,3094,1968,2002,1922,3014,1914],guidance:'FY27 -3~-5%. 150개 점포 폐쇄. 인수 무산.'},{name:'American Eagle',ticker:'AEO',color:'#14b8a6',dot:'🩵',sector:'캐주얼의류',fyEnd:'2월',rating:'-/A/-',rankings:{rev:5,gp:1,op:1,ni:1},rev:[4990,5262,5411,5568],gp:[1745,2025,2108,2189],op:[247,223,298,336],ni:[169,327,186,0],gpPct:[34.97,38.48,38.96,39.31],opPct:[4.95,4.24,5.51,6.03],niPct:[3.39,6.22,3.44,0],qRev:[1081,1201,1301,1679,1144,1275,1375,1716,1170,1298,1410,1750,1196],qOp:[23,49,68,90,78,53,72,105,65,70,88,122,62],qGp:[413,463,506,642,464,499,536,671,475,510,548,685,486],guidance:'FY27 +3~4%. Aerie 호조. OP% 6% 목표.'}];
+function fmt(n,d){if(!n&&n!==0)return'-';return n>=1000?(n/1e3).toFixed(d)+'B':n.toFixed(d)}
+function renderKPIs(){const a=companies.filter(c=>c.rev[3]>0),tr=a.reduce((s,c)=>s+c.rev[3],0),tr25=a.reduce((s,c)=>s+c.rev[2],0),ag=a.reduce((s,c)=>s+c.gpPct[2],0)/a.length,ao=a.reduce((s,c)=>s+c.opPct[2],0)/a.length,rg=((tr-tr25)/tr25*100);document.getElementById('kpiGrid').innerHTML=[{l:'FY26 총 매출',v:fmt(tr,1),s:'9개사 합산',c:'stat-up'},{l:'매출 성장률',v:(rg>=0?'+':'')+rg.toFixed(1)+'%',s:'FY25 대비',c:rg>=0?'stat-up':'stat-down'},{l:'평균 GP%',v:ag.toFixed(1)+'%',s:'FY25 기준',c:'stat-neutral'},{l:'평균 OP%',v:ao.toFixed(1)+'%',s:'FY25 기준',c:'stat-neutral'}].map(k=>`<div class=card><div class=label>${k.l}</div><div class="${k.c}">${k.v}</div><div class=label>${k.s}</div></div>`).join('')}
+function renderRevenueTable(){document.getElementById('revenueTable').innerHTML=companies.map(c=>{const y3=c.rev[3]||c.rev[2],y0=c.rev[0],ch=y3-y0,cagr=y0>0?((Math.pow(y3/y0,1/3)-1)*100):0,mr=Math.max(...c.rev.filter(v=>v>0));return `<tr><td><span class=company-dot style=background:${c.color}></span>${c.name} (${c.ticker})</td><td class=num>${fmt(c.rev[0],1)}</td><td class=num>${fmt(c.rev[1],1)}</td><td class=num>${fmt(c.rev[2],1)}</td><td class=num>${c.rev[3]?fmt(c.rev[3],1):'-'}</td><td class=num style=color:${ch>=0?'var(--green)':'var(--red)'}>${ch>=0?'+':''}${fmt(Math.abs(ch),1)}</td><td class=num style=color:${cagr>=0?'var(--green)':'var(--red)'}>${cagr!==0?(cagr>=0?'+':'')+cagr.toFixed(1)+'%':'-'}</td><td style=width:100px><div class=bar-wrap><div class=bar style=width:${(c.rev[3]||c.rev[2])/mr*100}%;background:${c.color}></div><span class=bar-label>${fmt(c.rev[3]||c.rev[2],1)}</span></div></td></tr>`}).join('')}
+function renderProfitCharts(){const a=companies.filter(c=>c.gpPct[2]>0),mx=[Math.max(...a.map(c=>c.gpPct[2])),Math.max(...a.map(c=>c.opPct[2])),Math.max(...a.map(c=>c.niPct[2]))];function ch(d,m,ky,cl){return d.map(c=>{const v=c[ky][2],p=v/m*100;return `<div class=flex-between style=margin-bottom:4px><span style=font-size:11px><span class=company-dot style=background:${c.color}></span>${c.name}</span><div class=bar-wrap style=width:55%><div class=bar style=width:${p}%;background:${cl}></div><span class=bar-label style=min-width:36px>${v.toFixed(1)}%</span></div></div>`}).join('')}
+document.getElementById('gpChart').innerHTML=ch(a,mx[0],'gpPct','var(--green)');document.getElementById('opChart').innerHTML=ch(a,mx[1],'opPct','var(--accent)');document.getElementById('niChart').innerHTML=ch(a,mx[2],'niPct','var(--purple)')}
+function rBadge(r){if(!r||r==='-')return'<span class=tag tag-c>NR</span>';const m={aa:'tag-aa',a2:'tag-a',a3:'tag-a',baa:'tag-bbb',bb:'tag-bb',ba:'tag-bb',b:'tag-b',wd:'tag-b'};let c='tag-b';const lo=r.toLowerCase();for(const[k,v]of Object.entries(m)){if(lo.includes(k)){c=v;break}}return`<span class=tag ${c}>${r}</span>`}
+function spark(a,c){if(!a||!a.length)return'';const mx=Math.max(...a.filter(v=>v>0)),lb=['23.1Q','23.2Q','23.3Q','23.4Q','24.1Q','24.2Q','24.3Q','24.4Q','25.1Q','25.2Q','25.3Q','25.4Q','26.1Q'];return`<div class=spark-group>${a.map((v,i)=>v===0?'':`<div class=spark-bar style=height:${Math.max(2,(v/mx)*28)}px;background:${c} title="${lb[i]}:${(v/1e3).toFixed(1)}B"></div>`).filter(Boolean).join('')}</div>`}
+function renderCards(){const lb=['23.1Q','23.2Q','23.3Q','23.4Q','24.1Q','24.2Q','24.3Q','24.4Q','25.1Q','25.2Q','25.3Q','25.4Q','26.1Q'];document.getElementById('companyCards').innerHTML=companies.map(c=>{const rows=[];for(let i=0;i<13;i++){if(c.qRev[i]===0)continue;rows.push({q:lb[i],rev:c.qRev[i],gp:c.qGp[i],op:c.qOp[i]})}const lq=rows[rows.length-1];return`<div class=card><div class=flex-between mb-8><div><h3 style=color:${c.color}>${c.dot} ${c.name} (${c.ticker})</h3><div class=label>${c.sector} · ${c.fyEnd} 결산</div></div><div>${rBadge(c.rating)}</div></div><div class="grid grid-3" style=gap:8px;margin-bottom:8px><div><div class=label>연간 매출</div><div style=font-weight:600;font-size:14px>${c.rev[3]?fmt(c.rev[3],2):fmt(c.rev[2],2)}</div><div class=label>FY${c.rev[3]?'26':'25'}</div></div><div><div class=label>GP% (FY25)</div><div style=font-weight:600;font-size:14px;color:var(--green)>${c.gpPct[2].toFixed(1)}%</div></div><div><div class=label>OP% (FY25)</div><div style=font-weight:600;font-size:14px;color:${c.opPct[2]>=0?'var(--accent)':'var(--red)'}>${c.opPct[2].toFixed(1)}%</div></div></div><div class=label mb-8>분기 매출</div>${spark(c.qRev,c.color)}<div class="flex-between mt-12" style=padding:6px 0;border-top:1px solid rgba(255,255,255,0.06)><span class=label>${lq.q}</span><span style=font-weight:600>${fmt(lq.rev,2)}</span><span style=color:${lq.op>=0?'var(--green)':'var(--red)'};font-size:11px>OP${lq.op>=0?'+':''}$${Math.abs(lq.op).toFixed(0)}M</span></div><div class=guidance style=margin-top:8px><h4>📋 전망</h4><p>${c.guidance}</p></div></div>`}).join('')}
+function renderGuidance(){document.getElementById('guidanceSection').innerHTML=`<div class="grid grid-2" style=gap:20px><div><h3 style=color:var(--green);margin-bottom:8px>✅ 긍정 요인</h3><ul style=font-size:12px;color:var(--muted);line-height:1.8;padding-left:16px><li><b>Walmart</b> — +3~4% 가이던스<li><b>AEO</b> — Aerie 호조. OP% 6% 목표<li><b>Gap</b> — Old Navy/Athleta 호전<li><b>Target</b> — 소형 포맷 확대</ul></div><div><h3 style=color:var(--red);margin-bottom:8px>⚠️ 부정 요인</h3><ul style=font-size:12px;color:var(--muted);line-height:1.8;padding-left:16px><li><b>Kohl's</b> — 매출 감소 지속<li><b>Macy's</b> — 150개 점포 폐쇄<li><b>PLCE</b> — 유동성 위기<li><b>HBI</b> — 매출 60% 감소<li><b>Carter's</b> — 출생률 저하</ul></div></div><div style=margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06)><h3 style=color:var(--yellow);margin-bottom:6px>📊 종합 전망</h3><p style=font-size:12px;color:var(--muted);line-height:1.6>의류·소매 업계 <b>양극화</b> 심화. 강자(WMT/AEO)는 마진 개선·성장, 약체(M/KSS/PLCE)는 구조조정. <b>리스크:</b> 관세, 소비 둔화, 재고 부담. <b>기회:</b> DTC 전환, AI 최적화, 라틴아메리카.</p></div>`}
+renderKPIs();renderRevenueTable();renderProfitCharts();renderCards();renderGuidance();
+</script>
+</body></html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>약진 해외생산법인 소모품비 — JSV(의류) · JSB(핸드백)</title>
+<style>
+:root{--navy:#1f3864;--gold:#b88a2e;--bg:#f0f2f5;--card:#fff;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:var(--bg);color:var(--ink);padding:16px;max-width:1480px;margin:0 auto;line-height:1.5}
+#topbar{position:sticky;top:0;z-index:40;background:var(--bg);padding:4px 0 6px}
+.head{background:var(--navy);color:#fff;border-radius:10px;padding:10px 18px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.head h1{font-size:17px;margin:0}.head .sub{font-size:11.5px;opacity:.8}
+.kpis{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.ckpi{flex:1 1 0;min-width:165px;background:var(--card);border-radius:9px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:10px 13px;cursor:pointer;transition:.12s;position:relative}
+.ckpi:hover{box-shadow:0 0 0 2px #9db3d6}
+.ckh{font-size:12px;font-weight:800;color:var(--navy)}
+.ckv{font-size:17px;font-weight:800;color:var(--navy);margin-top:3px}.cks{font-size:11px;font-weight:600;color:var(--muted)}
+.ckd{font-size:11px;color:var(--muted);margin-top:3px}
+.panel{background:var(--card);border-radius:11px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:13px 15px;margin-bottom:10px}
+.panel h3{font-size:11.5px;color:var(--navy);font-weight:800;margin-bottom:9px;letter-spacing:.3px}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.btn{border:1px solid var(--line);background:#f8fafc;color:#475569;border-radius:7px;padding:5px 10px;font-size:12px;cursor:pointer;transition:.12s;font-family:inherit;user-select:none}
+.btn:hover{border-color:var(--navy)}.btn.on{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:700}
+.csep{width:1px;height:22px;background:#cbd5e1;margin:0 5px}
+#entityRow{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+.egroup{border:1px solid var(--line);border-radius:10px;padding:9px;background:#fbfcfe;display:flex;flex-direction:column;flex:1}
+.ghbtn{font-size:16px;font-weight:800;letter-spacing:1px;cursor:pointer;border:2px solid;border-radius:8px;padding:7px 0;text-align:center;user-select:none;transition:.12s;background:#fff}
+.echips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px;flex:1;align-content:flex-start}
+.ecard{flex:0 0 100px;border:1.5px solid var(--line);border-radius:8px;padding:6px 3px;text-align:center;cursor:pointer;transition:.12s;background:#fff}
+.ecard:not(.on){opacity:.45}
+.ecard .eab{font-size:12.5px;font-weight:800}.ecard .esc{font-size:11px;font-weight:800;margin-top:3px}
+.ecard .egr{display:inline-block;font-size:9px;font-weight:800;border-radius:3px;padding:0 4px;color:#fff;margin-top:3px}
+.chart{position:relative;height:360px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-size:10.5px;position:sticky;top:0;background:#fff}
+td.l,th.l{text-align:left}
+tr.gh td{background:#eef2f8;font-weight:800;font-size:12px;color:var(--navy);padding:8px}
+tr.sh td{background:#f8fafc;font-weight:700;color:var(--navy)}
+.flag{display:inline-block;min-width:22px;font-size:10px;font-weight:800;border-radius:4px;padding:1px 4px;text-align:center;margin-right:5px;color:#fff}
+.muted{color:var(--muted)}.note{font-size:11px;color:var(--muted);margin-top:7px}
+.foot{color:var(--muted);font-size:10.5px;margin-top:18px;border-top:1px solid var(--line);padding-top:11px}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tab{background:#fff;border:1px solid var(--line);border-bottom:3px solid transparent;border-radius:9px 9px 0 0;padding:9px 18px;font-size:13px;font-weight:800;color:var(--muted);cursor:pointer}
+.tab.on{color:var(--navy);border-bottom-color:var(--gold);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:100;align-items:center;justify-content:center;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:12px;max-width:460px;width:100%;padding:18px 20px;box-shadow:0 12px 44px rgba(0,0,0,.35)}
+.modal h4{color:var(--navy);font-size:15px;margin-bottom:8px}
+.modal .formula{background:#eef2f8;border-radius:8px;padding:9px 12px;font-size:13px;margin:8px 0;color:var(--navy);font-weight:800}
+.modal .mb{font-size:12.5px;color:#374151;line-height:1.65}
+.modal .mclose{margin-top:14px;text-align:center;background:var(--navy);color:#fff;border-radius:7px;padding:8px;cursor:pointer;font-weight:700}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+</style></head><body>
+<div id="topbar"><div class="head"><h1>약진 해외생산법인 소모품비 — JSV(의류) · JSB(핸드백)</h1>
+<span class="sub">2026년 5월 마감 · 베트남 현지법인 · 환율 $1 = VND 26,000 · KPI 클릭=계산식</span></div></div>
+
+<script>
+const DATA = {
+  entities: {
+    JSV: { label:"의류 JSV", group:"의류", color:"#1f3864", short:"JSV" },
+    JSB: { label:"핸드백 JSB", group:"핸드백", color:"#b88a2e", short:"JSB" }
+  },
+  kpiDefs: [
+    { id:"consVND", label:"소모품비(VND)", formula:"당월 소모품비 발생 금액 (VAT 제외)", unit:"VND" },
+    { id:"consAmt", label:"소모품비($)", formula:"소모품비(VND) ÷ 환율(26,000)", unit:"$" },
+    { id:"wageVND", label:"가공임(VND)", formula:"당월 가공임(공정임) 금액", unit:"VND" },
+    { id:"ratio", label:"소모품비율(%)", formula:"소모품비(VND) ÷ 가공임(VND) × 100", unit:"%" },
+    { id:"totalVND", label:"합계(VAT포함)", formula:"소모품비 + 부가세(VAT 8~10%)", unit:"VND" },
+    { id:"vat", label:"부가세(VND)", formula:"당월 부가세 금액", unit:"VND" }
+  ],
+  entityData: {
+    JSV: { name:"의류 JSV",
+      consVND:125554000, consAmt:4829, wageVND:940700,
+      ratio:0.86, vat:9553640, totalVND:135107640, headcount:160,
+      categories:[
+        {name:"정기반소모품", total:12671.33, months:[2853.76,1905.66,2318.41,3227.67,2365.82]},
+        {name:"수선용소모품", total:7486.11, months:[1717.99,2005.92,1103.35,1300.60,1358.25]},
+        {name:"절단용소모품", total:2955.46, months:[1174.46,284.44,710.65,352.87,433.04]},
+        {name:"구매부자재", total:14019.01, months:[1953.67,1077.83,7214.88,797.68,2974.95]}
+      ],
+      suppliers:[
+        {name:"NHAT QUANG MINH", vnd:29858920, note:"PLANT 2"},
+        {name:"PHUOC THUANH (TAE GWANG)", vnd:75545460, note:"PLANT 2"},
+        {name:"DAI TAN 5 (YANG JI)", vnd:6446000, note:"PLANT 2"},
+        {name:"BAMBU", vnd:4185000, note:"PLANT 2"},
+        {name:"YANGJI HITECH", vnd:7063200, note:"PLANT 2"},
+        {name:"SONG THAP (BK)", vnd:12009060, note:"PLANT 2"}
+      ]
+    },
+    JSB: { name:"핸드백 JSB",
+      consVND:197336622, consAmt:7589, wageVND:1228786,
+      ratio:4.89, vat:16265408, totalVND:213602030, headcount:450,
+      categories:[
+        {name:"정기반소모품", total:21247.35, months:[3305.33,2306.55,6787.95,5407.87,3439.65]},
+        {name:"수선용소모품", total:10833.83, months:[2208.15,1938.82,2835.36,1799.39,2052.10]},
+        {name:"절단용소모품", total:7863.57, months:[1228.67,1082.49,1093.16,1775.83,2683.42]},
+        {name:"구매부자재", total:9976.41, months:[5002.55,2895.08,548.49,882.88,647.41]}
+      ],
+      suppliers:[
+        {name:"GIANG LONG", vnd:32138836, note:"HB/SLG"},
+        {name:"HAN THANH", vnd:21157200, note:"HB"},
+        {name:"TAE GWANG", vnd:21004054, note:"HB/SLG"},
+        {name:"VIMA (SLG)", vnd:24572000, note:"SLG"},
+        {name:"DONG J", vnd:8731800, note:"HB"},
+        {name:"PHUOC THU", vnd:4536000, note:"HB"}
+      ]
+    }
+  },
+  timeSeries: {
+    JSV: [7699.88,5273.85,11347.29,5678.82,7132.06],
+    JSB: [11744.70,8222.94,11264.95,9865.98,8822.58]
+  }
+};
+
+let state = { selected: {JSV:true,JSB:true}, tab:"all", chartMode:"monthly" };
+const EX = 26000;
+function s(q){return document.querySelectorAll(q);}
+function o(q){return document.querySelector(q);}
+
+function toggleEntity(k){
+  state.selected[k]=!state.selected[k]; renderAll();
+}
+
+function switchTab(t){
+  state.tab=t;
+  o("#tabAll").className="tab"+(t==="all"?" on":"");
+  o("#tabDetail").className="tab"+(t==="detail"?" on":"");
+  o("#tabAllContent").style.display=t==="all"?"":"none";
+  o("#tabDetailContent").style.display=t==="detail"?"":"none";
+}
+
+function setChartMode(m){
+  state.chartMode=m;
+  s(".btn.cmode").forEach(b=>b.className="btn cmode"+(b.dataset.mode===m?" on":""));
+  renderChart();
+}
+
+function showFormula(kpi){
+  const kd=DATA.kpiDefs.find(k=>k.id===kpi);
+  o(".modal h4").textContent=kd?kd.label:kpi;
+  o(".modal .formula").textContent=kd?kd.formula:"";
+  o(".modal-bg").classList.add("show");
+}
+function closeFormula(){o(".modal-bg").classList.remove("show");}
+
+function renderKPIs(){
+  const c=o("#kpiGrid"); c.innerHTML="";
+  const ek=Object.keys(DATA.entityData).filter(k=>state.selected[k]);
+  if(!ek.length){c.innerHTML='<div class="muted" style="text-align:center;padding:30px">법인 선택</div>'; return;}
+  const s={consVND:0,consAmt:0,wageVND:0,vat:0,totalVND:0};
+  ek.forEach(k=>{const d=DATA.entityData[k]; s.consVND+=d.consVND; s.consAmt+=d.consAmt; s.wageVND+=d.wageVND; s.vat+=d.vat; s.totalVND+=d.totalVND;});
+  DATA.kpiDefs.forEach(kd=>{
+    let val=""; const u=kd.unit;
+    if(kd.id==="consVND"){val=s.consVND.toLocaleString()}
+    else if(kd.id==="consAmt"){val="$"+s.consAmt.toLocaleString()}
+    else if(kd.id==="wageVND"){val=s.wageVND.toLocaleString()}
+    else if(kd.id==="totalVND"){val=s.totalVND.toLocaleString();}
+    else if(kd.id==="ratio"){const r=s.wageVND?(s.consVND/s.wageVND*100):0; val=r.toFixed(2);}
+    else if(kd.id==="vat"){val=s.vat.toLocaleString()}
+    const div=document.createElement("div");div.className="ckpi";div.onclick=()=>showFormula(kd.id);
+    div.innerHTML=`<div class="ckh">${kd.label}</div><div class="ckv">${val} <span class="cks">${u}</span></div><div class="ckd">선택 ${ek.length}개</div>`;
+    c.appendChild(div);
+  });
+}
+
+function renderEntityCards(){
+  const c=o("#entityRow"); c.innerHTML="";
+  const groups={};
+  Object.keys(DATA.entities).forEach(k=>{const e=DATA.entities[k];(groups[e.group]=groups[e.group]||[]).push(k);});
+  Object.entries(groups).forEach(([g,ks])=>{
+    const gdiv=document.createElement("div");gdiv.className="egroup";
+    const gbtn=document.createElement("div");gbtn.className="ghbtn";
+    gbtn.style.borderColor="#1f3864";const anyOn=ks.some(k=>state.selected[k]);
+    gbtn.style.color=anyOn?"#fff":"#1f3864";gbtn.style.background=anyOn?"#1f3864":"#fff";
+    gbtn.textContent=g;gbtn.onclick=()=>{ks.forEach(k=>state.selected[k]=!anyOn);renderAll();};
+    gdiv.appendChild(gbtn);
+    const chips=document.createElement("div");chips.className="echips";
+    ks.forEach(k=>{
+      const e=DATA.entities[k];const d=DATA.entityData[k];
+      const r=d.wageVND?(d.consVND/d.wageVND*100):0;
+      const fc=r<=1?"#059669":r<=3?"#b88a2e":"#dc2626";
+      const ec=document.createElement("div");ec.className="ecard"+(state.selected[k]?" on":"");
+      ec.onclick=()=>toggleEntity(k);
+      ec.innerHTML=`<div class="eab">${e.short}</div><div class="esc" style="color:${e.color}">${(d.consVND/1e6).toFixed(1)}M VND</div><div class="egr" style="background:${fc}">${r.toFixed(2)}%</div>`;
+      chips.appendChild(ec);
+    });
+    gdiv.appendChild(chips);c.appendChild(gdiv);
+  });
+}
+
+function renderChart(){
+  const canvas=o("#mainChart");
+  if(window._chart){window._chart.destroy();window._chart=null;}
+  const ek=Object.keys(DATA.entityData).filter(k=>state.selected[k]);
+  if(!ek.length)return;
+  
+  if(state.chartMode==="category"){
+    const cats=["정기반소모품","수선용소모품","절단용소모품","구매부자재"];
+    const colors=["#1f3864","#2563eb","#7c3aed","#b88a2e"];
+    const dss=cats.map((c,ci)=>({label:c,data:[],backgroundColor:colors[ci],borderColor:colors[ci],borderWidth:1}));
+    ek.forEach(k=>{const d=DATA.entityData[k]; cats.forEach((c,ci)=>{const f=d.categories.find(x=>x.name===c); dss[ci].data.push(f?f.total:0);});});
+    window._chart=new Chart(canvas,{type:"bar",data:{labels:ek.map(k=>DATA.entities[k].label),datasets:dss},options:{
+      responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{padding:10,usePointStyle:true,font:{size:10}}}},
+      scales:{x:{grid:{display:false}},y:{beginAtZero:true,title:{display:true,text:"소모품비 ($)",font:{size:10}}}}
+    }});
+  } else {
+    const dss=ek.map((k,i)=>({
+      label:DATA.entities[k].label, data:DATA.timeSeries[k],
+      borderColor:DATA.entities[k].color, backgroundColor:DATA.entities[k].color+"22",
+      tension:0.3, fill:false, pointRadius:4
+    }));
+    window._chart=new Chart(canvas,{type:"line",data:{labels:["1월","2월","3월","4월","5월"],datasets:dss},options:{
+      responsive:true,maintainAspectRatio:false,interaction:{mode:"nearest",intersect:false},
+      plugins:{legend:{position:"bottom",labels:{padding:10,usePointStyle:true,font:{size:10}}}},
+      scales:{x:{grid:{display:false}},y:{beginAtZero:true,title:{display:true,text:"소모품비 ($)",font:{size:10}}}}
+    }});
+  }
+}
+
+function renderTable(){
+  const tb=o("#detailTbody"); tb.innerHTML="";
+  const ek=Object.keys(DATA.entityData).filter(k=>state.selected[k]);
+  const allSup=[];
+  ek.forEach(k=>{
+    const d=DATA.entityData[k];const e=DATA.entities[k];const r=d.wageVND?(d.consVND/d.wageVND*100):0;
+    const fc=r<=1?"#059669":r<=3?"#b88a2e":"#dc2626";
+    let tr=document.createElement("tr");tr.className="gh";
+    tr.innerHTML=`<td colspan="7">${e.label} — 2026년 5월</td>`;tb.appendChild(tr);
+    tr=document.createElement("tr");tr.className="sh";
+    tr.innerHTML=`<td class="l">소모품비</td><td>${d.consVND.toLocaleString()} VND</td><td class="l">가공임</td><td>${d.wageVND.toLocaleString()} VND</td><td class="l">비율</td><td><span style="background:${fc};color:#fff;border-radius:4px;padding:1px 6px;font-weight:700">${r.toFixed(2)}%</span></td><td></td>`;
+    tb.appendChild(tr);
+    tr=document.createElement("tr");tr.className="sh";
+    tr.innerHTML=`<td class="l">VAT</td><td>${d.vat.toLocaleString()} VND</td><td class="l">합계(VAT포함)</td><td>${d.totalVND.toLocaleString()} VND</td><td class="l">USD</td><td>$${d.consAmt.toLocaleString()}</td><td></td>`;
+    tb.appendChild(tr);
+    // Category
+    tr=document.createElement("tr");tr.style.cssText="background:#f5f7fa;font-weight:700";
+    tr.innerHTML=`<td class="l">카테고리</td><td>합계($)</td><td>1월</td><td>2월</td><td>3월</td><td>4월</td><td>5월</td>`;
+    tb.appendChild(tr);
+    d.categories.forEach(c=>{
+      tr=document.createElement("tr");
+      let h=`<td class="l">${c.name}</td><td>$${c.total.toFixed(2)}</td>`;
+      c.months.forEach(m=>h+=`<td>$${(m||0).toFixed(2)}</td>`);h+="<td></td>";
+      tr.innerHTML=h;tb.appendChild(tr);
+    });
+    // Suppliers
+    tr=document.createElement("tr");tr.style.cssText="background:#f5f7fa;font-weight:700";
+    tr.innerHTML=`<td class="l" colspan="7">협력사별 (2026년 5월)</td>`;tb.appendChild(tr);
+    d.suppliers.forEach(sup=>{
+      tr=document.createElement("tr");
+      tr.innerHTML=`<td class="l">${sup.name}</td><td>${sup.vnd.toLocaleString()} VND</td><td>$${(sup.vnd/EX).toFixed(2)}</td><td>${sup.note||""}</td><td></td><td></td><td></td>`;
+      tb.appendChild(tr);
+      allSup.push({entity:e.label,name:sup.name,vnd:sup.vnd,note:sup.note});
+    });
+  });
+  // All suppliers table in detail tab
+  const atb=o("#allSupplierTbody");
+  if(atb){
+    atb.innerHTML="";allSup.sort((a,b)=>b.vnd-a.vnd);
+    allSup.forEach(s=>{
+      const tr=document.createElement("tr");
+      tr.innerHTML=`<td class="l">${s.name}</td><td>${s.entity}</td><td>${s.note}</td><td>${s.vnd.toLocaleString()} VND</td><td>$${(s.vnd/EX).toFixed(2)}</td>`;
+      atb.appendChild(tr);
+    });
+  }
+}
+
+function renderAll(){renderKPIs();renderEntityCards();renderChart();renderTable();}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  renderAll();
+  s(".btn.cmode").forEach(b=>b.className="btn cmode"+(b.dataset.mode===state.chartMode?" on":""));
+});
+</script>
+
+<div class="tabs">
+  <div class="tab on" id="tabAll" onclick="switchTab('all')">종합</div>
+  <div class="tab" id="tabDetail" onclick="switchTab('detail')">상세</div>
+</div>
+
+<div id="tabAllContent">
+  <div class="kpis" id="kpiGrid"></div>
+  <div id="entityRow"></div>
+  <div class="panel">
+    <div class="row" style="margin-bottom:8px">
+      <h3 style="margin:0;font-size:12px;width:auto">소모품비 분석</h3>
+      <div class="csep"></div>
+      <button class="btn cmode on" data-mode="monthly" onclick="setChartMode('monthly')">월별 추이</button>
+      <button class="btn cmode" data-mode="category" onclick="setChartMode('category')">카테고리</button>
+    </div>
+    <div class="chart"><canvas id="mainChart"></canvas></div>
+  </div>
+  <div class="panel">
+    <h3>법인별 상세</h3>
+    <table><thead><tr><th class="l">구분</th><th>값</th><th class="l">구분</th><th>값</th><th class="l">구분</th><th>값</th><th></th></tr></thead><tbody id="detailTbody"></tbody></table>
+  </div>
+</div>
+
+<div id="tabDetailContent" style="display:none">
+  <div class="panel">
+    <h3>전체 협력사 소모품비 합산</h3>
+    <table><thead><tr><th class="l">협력사</th><th class="l">법인</th><th class="l">구분</th><th>금액(VND)</th><th>금액($)</th></tr></thead><tbody id="allSupplierTbody"></tbody></table>
+  </div>
+  <div class="panel">
+    <h3>데이터 요약</h3>
+    <div class="note">
+      <b>출처:</b> 2026년_05월_소모품_현황_의류창_JSV / 핸드백_JSB<br>
+      <b>기준:</b> USD 1 = VND 26,000 · VAT 8~10%<br>
+      <b>기간:</b> 2026.05.02 ~ 2026.05.30<br>
+      <b>소모품비율:</b> 소모품비(VND) ÷ 가공임(VND) × 100
+    </div>
+  </div>
+</div>
+
+<div class="foot">약진 · JSV(의류) · JSB(핸드백) · 2026년 5월 마감 · 오프라인 대시보드</div>
+
+<div class="modal-bg" onclick="closeFormula()"><div class="modal" onclick="event.stopPropagation()"><h4>KPI</h4><div class="mb"><div class="formula"></div></div><div class="mclose" onclick="closeFormula()">닫기</div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body></html>
