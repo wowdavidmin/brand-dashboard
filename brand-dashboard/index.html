@@ -28,105 +28,17 @@ td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.04)}tr:hover td{ba
 .guidance h4{font-size:12px;color:var(--accent);margin-bottom:4px}.guidance p{font-size:11px;color:var(--muted);line-height:1.5}
 .corr-item{padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)}.corr-item:last-child{border-bottom:none}
 @media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+
+.tooltip{position:relative;cursor:pointer;display:inline-block}
+.tooltip .tooltiptext{visibility:hidden;width:300px;background:var(--card);color:var(--fg);font-size:11px;text-align:left;border-radius:8px;padding:10px 12px;border:1px solid rgba(255,255,255,0.1);position:absolute;z-index:100;bottom:125%;left:50%;transform:translateX(-50%);opacity:0;transition:opacity 0.2s;box-shadow:0 8px 24px rgba(0,0,0,0.4);line-height:1.5;pointer-events:none}
+.tooltip .tooltiptext::after{content:"";position:absolute;top:100%;left:50%;margin-left:-5px;border-width:5px;border-style:solid;border-color:var(--card) transparent transparent transparent}
+.tooltip:hover .tooltiptext{visibility:visible;opacity:1}
 </style>
 <div class=dash>
 <div class=modal-overlay id=modalOverlay onclick="if(event.target==this)closeDetail()"><div class=modal-content id=modalContent><span class=modal-close onclick=closeDetail()>×</span><div id=modalBody></div></div></div>
 <h1>📊 글로벌 경제 현황 및 주요 브랜드 실적</h1>
 <p class=subtitle>13개 주요 리테일/의류/스포츠 브랜드 | 2023~2026년 분기+연간 데이터 | 기준: 2026년 2분기 | 업데이트: 2026.07.27</p>
-<div class=section-title>📋 Executive Summary <span>2026.07.27 기준</span></div>
-<div class=card style="margin-bottom:16px;background:linear-gradient(135deg,rgba(239,68,68,0.06),rgba(239,68,68,0.02));border:1px solid rgba(239,68,68,0.15)">
-  <div class="grid grid-2" style=gap:20px>
-    <div>
-      <h3 style=color:var(--red);font-size:13px;margin-bottom:8px>🛢️ 미국-이란: &#x26A0;&#xFE0F; 휴전 결렬 → 전면 재개</h3>
-      <div style=font-size:11px;color:var(--muted);line-height:1.7>
-        <div style=padding:4px 0><b style=color:var(--fg)>7/7 호르무즈 해협 3척 피격:</b> 이란, 카타르 LNG선 Al Rekayat(기관실 화재·폭발 위험), 사우디 원유탱커 Wedyan, 제3탱커(Oman 앞서 드론 피격) 공격. 정전기간 9일 만에 <b style=color:var(--red)>군사 충돌 재개</b>.</div>
-        <div style=padding:4px 0><b style=color:var(--fg)>미국 즉각 보복:</b> CENTCOM, 이란 80+개 표적 정밀타격(방공망·C2·레이더·대함미사일·IRGC 고속정 60+척). <b style=color:var(--red)>7/8 2차 90개 표적 추가 타격</b>(반다르압바스·차바하르·이란샤르 등 남부 해안선).</div>
-        <div style=padding:4px 0><b style=color:var(--fg)>&#x1F534; 트럼프 "휴전 끝" 선언:</b> 7/8 "ceasefire is over" 공식 선언. "deal is a waste of time", "finish the job" 발언. NATO Ankara 정상회담서 강경파 기조. 재무부 이란 석유 제재 면제 즉시 철회, <b style=color:var(--red)>7/17까지 전면 제재 복원</b>.</div>
-        <div style=padding:4px 0><b style=color:var(--fg)>&#x1F4A5; 이란 retaliatory 공격 주장:</b> IRGC, 바레인·쿠웨이트 주둔 미군 85개 기지 타격 주장. Sheik Isa 공군기지 드론 공격 주장. 쿠웨이트, 공습 영상·사진 공유 금지령. <b style=color:var(--yellow)>&#x26A0; 독립 확인 제한적</b>.</div>
-        <div style=padding:4px 0><b style=color:var(--fg)>&#x1F4DD; 외교 경로 분리:</b> 7/9 Khamenei 장례 종료 후 도하 채널 재개 모색 중. 트럼프 혼선(7/9 "Iran called, wants a deal" vs 7/8 "ceasefire over"). Pakistan·Qatar·Egypt·Türkiye·Saudi 중재 노력 지속.<b style=color:var(--red)></div>
-        <div style=padding:4px 0><b style=color:var(--fg);color:var(--red)>&#x26A0; 유가 급등:</b> Brent 7/7 $73 → 7/8 $80↑ 전망. OPEC+ 7/5 증산 발표(일 150만 배럴)에도 지정학적 프리미엄 재반영. <b style=color:var(--red)>확전 시 Brent $95~$110 긴급 시나리오</b>. WTI $75~$85 구간.</div>
-        <div style=padding:4px 0><b style=color:var(--fg);color:var(--red)>소비자·물가 임팩트:</b> 휴전 결렬로 가솔린 $4.80~$5.00/gal 급등 전망. 의류 CPI 5%+ 확정적. <b style=color:var(--red)>&#x26A0; 6월 CPI 4.8~5.2% 긴급 전망 상향</b>. Core CPI 3% 돌파 리스크. <b style=color:var(--red)>CPI 5%+ → 하반기 경기침체·소비위축 '스태그플레이션' 우려</b>.</div>
-      </div>
-      <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.1);border-radius:8px;padding:8px 10px;margin-top:10px">
-        <h3 style=color:var(--orange);font-size:13px;margin-bottom:6px>🇻🇳 미국-베트남 관세: Section 301 12.5% 부과 추진</h3>
-        <div style=font-size:11px;color:var(--muted);line-height:1.7>
-          <div style=padding:3px 0><b style=color:var(--fg)>⚠ 6/2 USTR 발표:</b> USTR, 60개국 강제노동 Section 301 조사 결과 발표. 베트남 포함 54개국이 강제노동 수입금지 미이행 판정. <b style=color:var(--red)>베트남산 전 제품 12.5% 추가 관세</b> 제안 (기존 20% 상호관세 위에 누적).</div>
-          <div style=padding:3px 0><b style=color:var(--fg)>직물·의류 특례:</b> 일정 물량의 섬유·의류 수입에 대해 <b style=color:var(--green)>경감된 Section 301 세율 적용 메커니즘</b> 포함. 다만 세부 물량·조건 미정 — 업계 불확실성 지속.</div>
-          <div style=padding:3px 0><b style=color:var(--fg)>의류 업계 영향:</b> 베트남은 미국 2위 의류·신발 수입국(점유율 20%+). 누적 관세율 <b style=color:var(--red)>32.5%+</b> 시 바이어 소싱 전략 전면 재편 불가피. Nike·Adidas·H&M·Target 등 베트남 의존도 높은 바이어 <b style=color:var(--yellow)>GP% 직접 압박</b>.</div>
-          <div style=padding:3px 0><b style=color:var(--fg)>⏳ 의견수렴 기간:</b> 7월 공청회·의견수렴 후 최종 관세율 확정. 업계·베트남 정부 로비 경쟁 본격화. <b>Bangladesh·Cambodia·인도 등 대체 소싱국 수혜 가능</b>.</div>
-        </div>
-      </div>
-    </div>
-    <div>
-      <h3 style=color:var(--red);font-size:13px;margin-bottom:8px>📈 CPI & 인플레이션 (5월)</h3>
-      <div style=font-size:11px;color:var(--muted);line-height:1.7>
-        <div style=padding:4px 0><b style=color:var(--fg)>전체 CPI:</b> <b style=color:var(--red)>4.2%</b> (3년래 최고). 이란 전쟁 에너지 쇼크 주도. 2월 2.4% → 3월 3.3% → 4월 3.8% → 5월 4.2%로 4개월 연속 급등.</div>
-        <div style=padding:4px 0><b style=color:var(--fg)>Core CPI:</b> <b style=color:var(--green)>+2.9%</b> — 상대적 안정. 연준이 주목하는 근원물가 아직 3% 미만.</div>
-        <div style=padding:4px 0><b style=color:var(--fg)>의류 CPI:</b> <b style=color:var(--red)>+4.8%</b> — 전년 +0.6% 대비 급반등. 에너지·운송비 상승이 의류 가격에 전가. 바이어 GP% 압박 요인. 협상 교착 시 <b style=color:var(--red)>상반기 내 5%+</b> 가능.</div>
-        <div style=padding:4px 0><b style=color:var(--fg)>에너지 CPI:</b> <b style=color:var(--red)>&#x26A0; +28.5%</b> — 가솔린 48% 급등. 확전 반영. <b style=color:var(--red)>&#x26A0; 7월 CPI 5.5%+ 전망</b>.</div>
-      </div>
-      <h3 style=color:var(--purple);font-size:13px;margin:12px 0 8px>🏦 Warsh Fed 의장 정책</h3>
-      <div style=font-size:11px;color:var(--muted);line-height:1.7>
-        <div style=padding:4px 0><b style=color:var(--fg)>6/17 FOMC:</b> 만장일치 동결(3.50~3.75%). Warsh 의장 첫 회의. 점도표 2026 중간값 <b style=color:var(--orange)>3.80%</b>로 상향 → <b style=color:var(--red)>12월 1회 인상</b> 시사. 9명 인상 vs 8명 동결 vs 1명 인하 전망.</div>
-        <div style=padding:4px 0><b style=color:var(--fg)>&#x26A0; 파격:</b> Warsh, dot 미제출(비판적 입장). 성명서 341→130자로 대폭 축소. 커뮤니케이션·FOMC 구조 태스크포스 TF 구성 예고. 인하 바이어스 삭제.</div>
-        <div style=padding:4px 0><b style=color:var(--fg);color:var(--red)>금리 전망 &#x26A0;&#xFE0F; 대폭 수정:</b> <b style=color:var(--red)>휴전 결렬→유가 재급등→CPI 5%+ 경로 현실화</b>. CPI 4.8~5.2% 시 7월 FOMC(7/28-29) <b style=color:var(--red)>조기 인상 위험 급등</b>. 기존 12월 인상→9월 인상 가능성 +30%p. Warsh 성향 감안 시 시장 혼란 불가피.</div>
-      </div>
-    </div>
-  </div>
-  <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);font-size:11px;color:var(--muted);line-height:1.6">
-    <b style=color:var(--fg)>&#x1F4A1; 바이어 인사이트 [7/9 긴급 업데이트]:</b>
-    <b>1) &#x26A0;&#xFE0F 이란 확전 본격화:</b> 7/7 호르무즈 3척 피격→7/7-8 미군 170+개 표적 타격. 휴전 결렬·전면 재개. <b>Brent $73→$80+</b>. 의류 CPI 5%+ 확정적. <b style=color:var(--red)>소비자 지출 위축 본격화</b>. Macy's/Kohl's/PLCE 최대 타격. WMT/AEO/Gap 상대적 방어 우위.<br>
-    <b>2) 거시 충격파:</b> CPI 5%+ 시나리오 긴급 활성화. <b>Warsh Fed 7월(7/28-29) 조기 인상 리스크 +30%p</b>. 가솔린 $4.80~$5.00/gal. 가계소비 여력 급감. <b style=color:var(--red)>스태그플레이션 우려 대두</b>.<br>
-    <b>3) 베트남 관세:</b> Section 301 +12.5% 추진 지속(누적 32.5%). 이란 집중 속 의류 관세 논의 지연 가능성. Nike·Adidas·Target·H&M GP% 이중 압박.<br>
-    <b>4) 복합 시나리오:</b> 이란 확전+Section 301 동시 발동 시 <b style=color:var(--red)>업계 구조조정 가속화</b>. 의류 가격 5%+→수요 위축→저가 브랜드(WMT/Gap) 상대적 수혜, 중간 가격대(M/KSS) 최대 피해.
-  </div>
-  <div style="margin-top:16px;padding-top:12px;border-top:2px solid var(--accent)">
-    <h3 style=font-size:13px;margin-bottom:10px>&#x1F4CA; FOMC 점도표 (2026.6.17) — 금리 전망 분포</h3>
-    <div class="grid grid-2" style=gap:16px>
-      <div>
-        <div style=font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:600>2026년 말 예상 금리</div>
-        <div style=display:flex;align-items:flex-end;gap:6px;height:60px;margin-bottom:4px;margin-top:12px>
-          <div style=display:flex;flex-direction:column;align-items:center;width:40px>
-            <span style=font-size:9px;color:var(--red);font-weight:700>8명</span>
-            <div style=width:28px;height:40px;background:rgba(34,197,94,0.3);border-radius:4px 4px 0 0></div>
-            <span style=font-size:9px;color:var(--muted);margin-top:2px>동결</span>
-          </div>
-          <div style=display:flex;flex-direction:column;align-items:center;width:40px>
-            <span style=font-size:9px;color:var(--red);font-weight:700>9명</span>
-            <div style=width:28px;height:45px;background:rgba(239,68,68,0.3);border-radius:4px 4px 0 0></div>
-            <span style=font-size:9px;color:var(--muted);margin-top:2px>인상</span>
-          </div>
-          <div style=display:flex;flex-direction:column;align-items:center;width:40px>
-            <span style=font-size:9px;color:var(--muted);font-weight:700>1명</span>
-            <div style=width:28px;height:5px;background:rgba(59,130,246,0.3);border-radius:4px 4px 0 0></div>
-            <span style=font-size:9px;color:var(--muted);margin-top:2px>인하</span>
-          </div>
-          <div style=display:flex;flex-direction:column;align-items:center;width:40px>
-            <span style=font-size:9px;color:var(--purple);font-weight:700>Warsh</span>
-            <div style=width:28px;height:25px;background:rgba(168,85,247,0.25);border-radius:4px 4px 0 0;border:1px dashed var(--purple)></div>
-            <span style=font-size:9px;color:var(--muted);margin-top:2px>미제출</span>
-          </div>
-        </div>
-        <div style=font-size:10px;color:var(--muted);line-height:1.5>
-          <div><span style=color:var(--red)>■</span> 인상 9명 · <span style=color:var(--green)>■</span> 동결 8명 · <span style=color:var(--accent)>■</span> 인하 1명 · <span style=color:var(--purple)>■</span> Warsh dot 제출 안함</div>
-        </div>
-      </div>
-      <div>
-        <div style=font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:600>점도표 금리 전망 (중간값)</div>
-        <table style=width:100%;font-size:11px>
-          <thead><tr><th style=text-align:left;color:var(--muted);font-weight:500;padding:4px 6px;border-bottom:1px solid rgba(255,255,255,0.06)>구분</th><th style=text-align:right;color:var(--orange);padding:4px 6px;border-bottom:1px solid rgba(255,255,255,0.06)>2026년</th><th style=text-align:right;color:var(--green);padding:4px 6px;border-bottom:1px solid rgba(255,255,255,0.06)>2027년</th><th style=text-align:right;color:var(--purple);padding:4px 6px;border-bottom:1px solid rgba(255,255,255,0.06)>장기</th></tr></thead>
-          <tbody>
-            <tr><td style=padding:4px 6px;border-bottom:1px solid rgba(255,255,255,0.04)>중간값</td><td style=text-align:right;font-weight:700;color:var(--orange);padding:4px 6px><b>3.80%</b></td><td style=text-align:right;font-weight:700;color:var(--green);padding:4px 6px><b>3.25%</b></td><td style=text-align:right;font-weight:700;color:var(--purple);padding:4px 6px><b>2.75%</b></td></tr>
-            <tr><td style=padding:4px 6px;border-bottom:1px solid rgba(255,255,255,0.04)>이전(3월)</td><td style=text-align:right;color:var(--muted);padding:4px 6px>3.25~3.50%</td><td style=text-align:right;color:var(--muted);padding:4px 6px>3.00%</td><td style=text-align:right;color:var(--muted);padding:4px 6px>2.75%</td></tr>
-            <tr><td style=padding:4px 6px;border-bottom:none>변동</td><td style=text-align:right;color:var(--red);padding:4px 6px><span style=color:var(--red)>▲ +0.30~0.55%p</span></td><td style=text-align:right;color:var(--yellow);padding:4px 6px><span style=color:var(--yellow)>▲ +0.25%p</span></td><td style=text-align:right;color:var(--muted);padding:4px 6px><span style=color:var(--muted)>→ 유지</span></td></tr>
-          </tbody>
-        </table>
-        <div style=font-size:10px;color:var(--muted);margin-top:6px;line-height:1.5>
-          <span style=color:var(--red)>&#x26A0;</span> Warsh 의장, dot plot 비판적 입장 — 첫 회의 미제출. 성명서 341→130자 파격 단축. 인하 바이어스 삭제. FOMC 커뮤니케이션 전면 개편 TF 예고.
-        </div>
-      </div>
-    </div>
-  </div>
+<div class=section-title>📋 주요 브랜드 현황 <span>2026.07.27 기준</span></div>
 <div class=card style="margin-bottom:16px;background:linear-gradient(135deg,rgba(59,130,246,0.04),rgba(59,130,246,0.01));border:1px solid rgba(59,130,246,0.12)">
   <h3 style=font-size:13px;margin-bottom:10px>🏷️ 주요 브랜드 현황 <span style=font-size:11px;color:var(--muted);font-weight:400>| 2026.07.27 기준</span></h3>
   <div class="grid grid-3" style=gap:12px;font-size:11px;color:var(--muted);line-height:1.6>
@@ -327,5 +239,34 @@ renderRevenueTable();renderQuarterlyTable();renderProfitCharts();
 function rtgBadge(r){if(!r||r==='-/-/-')return'';var p=r.split('/');var v=p[1]&&p[1]!=='-'?p[1]:p[0]&&p[0]!=='-'?p[0]:p[2]&&p[2]!=='-'?p[2]:'';var ag=p[1]&&p[1]!=='-'?'S&P':p[0]&&p[0]!=='-'?'Moody\'s':p[2]&&p[2]!=='-'?'Fitch':'';var lo=v.toLowerCase();var m={aa:'tag-aa',a2:'tag-a',a3:'tag-a',baa:'tag-bbb',bb:'tag-bb',ba:'tag-bb',b:'tag-b'};var c='tag-b';for(var k in m){if(lo.indexOf(k)>=0){c=m[k];break}}return'<div><span class=tag '+c+'>'+ag+' '+v+'</span><br><span style=font-size:9px;color:var(--muted)>'+r+'</span></div>'}
 function showDetail(t){var c=companies.find(function(x){return x.ticker.toLowerCase()===t});if(!c)return;var lq=c.qRev.filter(function(v){return v>0});lq=lq[lq.length-1];var lqi=c.qRev.indexOf(lq);var yoy=lqi>=4&&c.qRev[lqi-4]?((lq-c.qRev[lqi-4])/c.qRev[lqi-4]*100):null;var opPct=lq?((c.qOp[c.qRev.indexOf(lq)]||0)/lq*100):0;var h='<div class=flex-between style=margin-bottom:16px><div><h2 style=color:'+c.color+'>'+c.dot+' '+c.name+' ('+c.ticker+')</h2><div class=label>'+c.sector+' \u00b7 '+c.fyEnd+' \uacb0\uc0b0</div></div>'+rtgBadge(c.rating)+'</div>';h+='<div class="grid grid-3" style=gap:12px;margin-bottom:12px><div><div class=label>\uc5f0\uac04 \ub9e4\ucd9c</div><div style=font-weight:600;font-size:16px>'+(c.rev[3]?fmt(c.rev[3],2):fmt(c.rev[2],2))+'</div></div><div><div class=label>GP% (FY25)</div><div style=font-weight:600;font-size:16px;color:var(--green)>'+c.gpPct[2].toFixed(1)+'%</div></div><div><div class=label>OP% (FY25)</div><div style=font-weight:600;font-size:16px;color:'+(c.opPct[2]>=0?'var(--accent)':'var(--red)')+'>'+c.opPct[2].toFixed(1)+'%</div></div></div>';h+='<div class=label style=margin-bottom:4px>\ubd84\uae30 \ub9e4\ucd9c</div>'+(function(){var fa=c.qRev.filter(function(v){return v>0});var lqfa=fa[fa.length-1];var li=c.qRev.indexOf(lqfa);var pv=c.qRev[li-4]||0;var vals=[pv,lqfa];var labs=[typeof qlb[li-4]!=='undefined'?qlb[li-4]:'',typeof qlb[li]!=='undefined'?qlb[li]:''];var mx2=Math.max.apply(Math,vals);return '<div style=display:flex;align-items:flex-end;gap:24px;height:60px;margin-top:4px;justify-content:center>'+vals.map(function(v,i){return '<div style=display:flex;flex-direction:column;align-items:center;gap:2px><span style=font-size:8px;color:var(--fg);line-height:1;white-space:nowrap;font-weight:600>'+(v>=100000?(v/1e3).toFixed(0):(v/1e3).toFixed(1))+'</span><div class=spark-bar style=height:'+Math.max(4,(v/mx2)*42)+'px;background:'+c.color+' title="'+labs[i]+':'+(v/1e3).toFixed(1)+'B"></div><span style=font-size:9px;color:var(--muted);margin-top:2px>'+labs[i]+'</span></div>'}).join('')+'</div>'})();h+='<div class=flex-between style="padding:8px 0;border-top:1px solid rgba(255,255,255,0.06);margin-top:8px"><span class=label>'+(qlb[c.qRev.indexOf(lq)]||'')+'</span><span style=font-weight:600;font-size:15px>'+qFmt(lq)+'</span><span style=font-size:12px;color:'+(yoy>=0?'var(--green)':'var(--red)')+'>YoY '+(yoy>=0?'+':'')+yoy.toFixed(1)+'%</span><span style=font-size:12px;color:'+(opPct>=0?'var(--green)':'var(--red)')+'>OP% '+opPct.toFixed(1)+'%</span></div>';h+='<div class=guidance style=margin-top:12px><h4>\ubbf8\ub798 \uc804\ub9dd</h4><p>'+c.guidance+'</p></div>';document.getElementById('modalBody').innerHTML=h;document.getElementById('modalOverlay').classList.add('active')}
 function closeDetail(){document.getElementById('modalOverlay').classList.remove('active')}
+
+// Enable hover tooltips on all brand links
+(function(){
+  var links = document.querySelectorAll('a[onclick*="showDetail"]');
+  links.forEach(function(a){
+    var ticker = a.getAttribute('onclick').match(/'(\w+)'/);
+    if(!ticker) return;
+    var c = companies.find(function(x){return x.ticker.toLowerCase()===ticker[1];});
+    if(!c) return;
+    // Create tooltip div
+    var tip = document.createElement('span');
+    tip.className = 'tooltiptext';
+    var lq = c.qRev.filter(function(v){return v>0;});
+    lq = lq[lq.length-1];
+    var lqi = c.qRev.indexOf(lq);
+    var yoy = lqi>=4&&c.qRev[lqi-4]?((lq-c.qRev[lqi-4])/c.qRev[lqi-4]*100).toFixed(1):'-';
+    var opPct = lq&&c.qOp[c.qRev.indexOf(lq)]?(c.qOp[c.qRev.indexOf(lq)]/lq*100).toFixed(1):'-';
+    tip.innerHTML = '<b>'+c.name+' ('+c.ticker+')</b><br>'+
+      '연간: '+(c.rev[3]?fmt(c.rev[3],2):fmt(c.rev[2],2))+'<br>'+
+      'GP%: '+c.gpPct[2].toFixed(1)+'% | OP%: '+c.opPct[2].toFixed(1)+'%<br>'+
+      '최근분기: '+qlb[lqi]+' '+qFmt(lq)+' | YoY '+yoy+'% | OP% '+opPct+'%';
+    // Wrap link in tooltip container
+    var wrapper = document.createElement('span');
+    wrapper.className = 'tooltip';
+    a.parentNode.insertBefore(wrapper, a);
+    wrapper.appendChild(a);
+    wrapper.appendChild(tip);
+  });
+})();
 </script>
 </body></html>
